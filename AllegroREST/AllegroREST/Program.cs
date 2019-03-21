@@ -1,6 +1,8 @@
 ﻿using AllegroREST.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -19,17 +21,25 @@ namespace AllegroREST
         {
             // configure dependencies
             var services = new ServiceCollection();
-            services.AddHttpClient<AllegroClient>();
-            var serviceProvider = services.BuildServiceProvider();
+            ConfigureServices(services);
 
-            // working with our client 
+            var serviceProvider = services.BuildServiceProvider();
             var allegro = serviceProvider.GetRequiredService<AllegroClient>();
+            // working with our client 
             await allegro.Authorize();
-            
             await allegro.GetMotorOffers();
-            //await allegro.RefreshAccessToken();
-            //await allegro.GetMyOffers();
-            //await allegro.GetListingByPhrase("motorola");
+
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false)
+                .Build();
+            services.AddSingleton<IConfigurationRoot>(configuration);
+            
+            services.AddHttpClient<AllegroClient>();
         }
 
     }

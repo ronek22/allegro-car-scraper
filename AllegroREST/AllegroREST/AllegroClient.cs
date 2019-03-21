@@ -13,21 +13,29 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Linq;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 
 namespace AllegroREST
 {
     public class AllegroClient
     {
         private HttpClient _client { get; }
-        private readonly string clientId = ""; // put your clientId here
-        private readonly string secretId = ""; // put your secretId here
+
+        private readonly IConfiguration _configuration;
+        private readonly string clientId;
+        private readonly string secretId;
         private readonly Uri AUTH_LINK = new Uri("https://allegro.pl/auth/oauth/device");
         private readonly Uri API_LINK = new Uri("https://api.allegro.pl/");
         private Token Token { set; get; }
 
-        public AllegroClient(HttpClient client)
+        public AllegroClient(HttpClient client, IConfigurationRoot configuration)
         {
             _client = client;
+            _configuration = configuration;
+            clientId = _configuration.GetSection("API")["CLIENT_ID"];
+            secretId = _configuration.GetSection("API")["SECRET_ID"];
+
+            System.Console.WriteLine(clientId + " " + secretId);
         }
 
         public async Task GetMotorOffers()
