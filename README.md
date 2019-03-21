@@ -1,7 +1,7 @@
 # Allegro car offers scraper
 ## About project
 Project consists of two seperate programs
-### [Allegro REST (.NET CORE)](AllegroREST)
+### [Allegro REST (.NET CORE)](AllegroREST/AllegroREST)
 My goal is to scrap all car offers from allegro and group results by dealer. 
 Dealer should store data about nickname, link, average_price, average_production_year
 I ran immediately into problems, because allegro in new api doesn't provide endpoints for ***details of given offer*** and ***details of user based on his id*** So in this app I just implement authorization (luckily it can be used in webapi) and downloading all offers(offerId, offerTitle, price)
