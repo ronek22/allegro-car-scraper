@@ -10,5 +10,5 @@ Firstly, after authorized in REST, you need to manualy copy *secret.json* to web
 Web Api provide endpoints for getting details about offer, this endpoint also return data about nickname so it's all i ever wanted. Also you need to copy *data_without_grouping.json* from REST. I also added multithreading to speed up, because on single thread takes 4 hours to complete, after changes it only requires ~4 minutes, so it's big improvement.
 
 ## TODO
-* Write script to automatically run two programs 
+* <del>Write script to automatically run two programs</del>
 * Export result to xsl instead of csv
