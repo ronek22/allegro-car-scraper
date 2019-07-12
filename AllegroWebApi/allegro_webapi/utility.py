@@ -1,6 +1,8 @@
 import requests
 import time
 
+REST = '../AllegroREST/AllegroREST/'
+
 
 class NetworkError(RuntimeError):
     pass

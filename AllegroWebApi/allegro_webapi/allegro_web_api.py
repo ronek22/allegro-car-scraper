@@ -1,5 +1,6 @@
 from zeep import Client
 import json
+from allegro_webapi.utility import REST
 
 
 class AllegroWebApi:
@@ -14,7 +15,7 @@ class AllegroWebApi:
 
     @property
     def login(self):
-        with open('./secret.json', 'r') as secret_file:
+        with open(REST + 'secret.json', 'r') as secret_file:
             secret = json.load(secret_file)
         access_token = secret['access_token']
         return self.client.service.doLoginWithAccessToken(access_token, self.country, self.api_key)['sessionHandlePart']
@@ -34,6 +35,8 @@ class AllegroWebApi:
 
         nick = response['itemListInfoExt']['itSellerLogin']
         local = response['itemListInfoExt']['itLocation'].capitalize()
+        description = response['itemListInfoExt']['itDescription']
+        stand_description = response['itemListInfoExt']['itStandardizedDescription']
         year = next((x['attribValues']['item'][0] for x in attrib if x['attribName'] == 'Rok produkcji' ), None)
 
         return {

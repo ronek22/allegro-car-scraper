@@ -9,6 +9,7 @@ from tqdm import tqdm
 from allegro_webapi.allegro_web_api import AllegroWebApi
 from allegro_webapi.models.Car import Car
 from allegro_webapi.models.Seller import Seller
+from allegro_webapi.utility import REST
 
 
 class Scraper:
@@ -37,19 +38,22 @@ class Scraper:
     @retryer
     def flut_stuff(self, offer):
         car = Car(offer['OfferId'], offer['Price'], offer['Name'])
-        content = self.allegro.get_item_info(car.offerId)
-        nick, location, year = content['nick'], content['local'], content['year']
+        try:
+            content = self.allegro.get_item_info(car.offerId)
+            nick, location, year = content['nick'], content['local'], content['year']
 
-        car.update(content['year'])
+            car.update(content['year'])
 
-        if nick in self.nicks:
-            seller = next((s for s in self.sellers if s.name == nick), None)
-            seller.add_car(car)
-        else:
-            seller = Seller(nick, location)
-            seller.add_car(car)
-            self.sellers.append(seller)
-            self.nicks.add(nick)
+            if nick in self.nicks:
+                seller = next((s for s in self.sellers if s.name == nick), None)
+                seller.add_car(car)
+            else:
+                seller = Seller(nick, location)
+                seller.add_car(car)
+                self.sellers.append(seller)
+                self.nicks.add(nick)
+        except Exception as e:
+            print("Problematic", e)
 
 
 
@@ -75,13 +79,13 @@ class Scraper:
 
     @property
     def _get_offers_from_json(self):
-        with open('./data.json', 'r') as data_file:
+        with open(REST + 'data.json', 'r') as data_file:
             data = json.load(data_file)
         return data
 
     @property
     def _get_offers_flat(self):
-        with open('./data_without_grouping.json', 'r') as data_file:
+        with open(REST + 'data_without_grouping.json', 'r') as data_file:
             data = json.load(data_file)
         return data
 

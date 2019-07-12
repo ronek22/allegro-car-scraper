@@ -634,4 +634,5 @@ dmypy.json
 secret.json
 data.json
 data_without_grouping.json
+appsettings.json
 .vscode/
